@@ -128,7 +128,7 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t dest_size)
 	return (src_size);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char const *s2)
 {
 	char	*dest;
 	size_t	len;
@@ -137,5 +137,34 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	dest = malloc(sizeof(char) * (len + 1));
 	ft_strlcpy(dest, s1, len);
 	ft_strlcat(dest, s2, len);
+	free(s1);
+	s1 = dest;
+	return (dest);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*dest;
+	size_t	i;
+
+	if (ft_strlen(s) < start)
+	{
+		dest = malloc(sizeof(char));
+		if (dest == NULL)
+			return (NULL);
+		*dest = '\0';
+		return (dest);
+	}
+	dest = malloc(sizeof(char) * (len + 1));
+	if (dest == NULL)
+		return (NULL);
+	i = 0;
+	while (i < len && s[start])
+	{
+		dest[i] = s[start];
+		start++;
+		i++;
+	}
+	dest[i] = '\0';
 	return (dest);
 }

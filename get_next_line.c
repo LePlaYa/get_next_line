@@ -20,28 +20,36 @@ int	get_next_line(int fd, char **line)
 	char			buf[BUFFER_SIZE + 1];
 	char			*tmp;
 
-	if (fd < 0 || line == NULL)
+	if (fd < 0 || line == NULL || BUFFER_SIZE <= 0)
 		return (-1);
 	r = read(fd, buf, BUFFER_SIZE);
-	if (r < 0)
-	{
-		return (r);
-	}
+	if (save != NULL)
+		*line = ft_strdup(save);
 	while (r > 0)
 	{
-		tmp = ft_strchr(buf, '\n');
-		if (tmp)
+		if (ft_strchr(buf, '\n'))
 		{
-			if (ft_strlen(tmp) > 1)
-				save = ft_strdup(tmp + 1);
-			*line = ft_strjoin(*line, );
+			if (ft_strlen(ft_strchr(buf, '\n') + 1) >= 1)
+			{
+				free(save);
+				save = ft_strdup(ft_strchr(buf, '\n') + 1);
+			}
+			tmp = ft_substr(buf, 0, ft_strlen(buf)
+					- ft_strlen(ft_strchr(buf, '\n')));
+			*line = ft_strjoin(*line, tmp);
+			free(tmp);
 			break ;
 		}
 		else
 		{
-
+			if (*line != NULL)
+				*line = ft_strjoin(*line, buf);
+			else
+				*line = ft_strdup(buf);
 		}
 		r = read(fd, buf, BUFFER_SIZE);
 	}
+	if (r == 0 && save != NULL)
+		free(save);
 	return (r);
 }
