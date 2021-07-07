@@ -24,5 +24,6 @@ char	*ft_strjoin(char *s1, char const *s2);
 size_t	ft_strlcpy(char *dest, const char *src, size_t dest_size);
 size_t	ft_strlcat(char *dest, const char *src, size_t dest_size);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+void	ft_bzero(void *s, size_t n);
 
 #endif

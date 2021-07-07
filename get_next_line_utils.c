@@ -12,6 +12,19 @@
 
 #include "get_next_line.h"
 
+void	ft_bzero(void *s, size_t n)
+{
+	char	*str;
+
+	str = s;
+	while (str && n > 0)
+	{
+		n--;
+		*str = '\0';
+		str++;
+	}
+}
+
 size_t	ft_strlen(const char *str)
 {
 	int		i;
@@ -137,8 +150,6 @@ char	*ft_strjoin(char *s1, char const *s2)
 	dest = malloc(sizeof(char) * (len + 1));
 	ft_strlcpy(dest, s1, len);
 	ft_strlcat(dest, s2, len);
-	free(s1);
-	s1 = dest;
 	return (dest);
 }
 

@@ -11,7 +11,54 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
+
+int	get_line_length(char *save)
+{
+	int	len;
+
+	len = 0;
+	while (save[len] != '\n' && save[len] != '\0')
+		len++;
+	return (len);
+}
+
+int	get_new_line(char **save, char **line)
+{
+	int		len;
+	char	*tmp;
+
+	len = get_line_length(*save);
+	if ((*save)[len] == '\n')
+	{
+		*line = ft_substr(*save, 0, len);
+		tmp = ft_strdup(&(*save)[len + 1]);
+		free(*save);
+		*save = tmp;
+		if ((*save)[0] == '\0')
+		{
+			free(*save);
+			*save = NULL;
+		}
+	}
+	else
+	{
+		*line = ft_strdup(*save);
+		free(*save);
+		*save = NULL;
+		return (0);
+	}
+	return (1);
+}
+
+int	output(char **save, char **line, int r)
+{
+	if (r < 0)
+		return (-1);
+	else if (r == 0 && *save == NULL)
+		return (0);
+	else
+		return (get_new_line(save, line));
+}
 
 int	get_next_line(int fd, char **line)
 {
@@ -23,33 +70,21 @@ int	get_next_line(int fd, char **line)
 	if (fd < 0 || line == NULL || BUFFER_SIZE <= 0)
 		return (-1);
 	r = read(fd, buf, BUFFER_SIZE);
-	if (save != NULL)
-		*line = ft_strdup(save);
 	while (r > 0)
 	{
-		if (ft_strchr(buf, '\n'))
-		{
-			if (ft_strlen(ft_strchr(buf, '\n') + 1) >= 1)
-			{
-				free(save);
-				save = ft_strdup(ft_strchr(buf, '\n') + 1);
-			}
-			tmp = ft_substr(buf, 0, ft_strlen(buf)
-					- ft_strlen(ft_strchr(buf, '\n')));
-			*line = ft_strjoin(*line, tmp);
-			free(tmp);
-			break ;
-		}
+		buf[r] = '\0';
+		if (save == NULL)
+			save = ft_strdup(buf);
 		else
 		{
-			if (*line != NULL)
-				*line = ft_strjoin(*line, buf);
-			else
-				*line = ft_strdup(buf);
+			tmp = ft_strjoin(save, buf);
+			if (save != NULL)
+				free(save);
+			save = tmp;
 		}
+		if (ft_strchr(save, '\n'))
+			break ;
 		r = read(fd, buf, BUFFER_SIZE);
 	}
-	if (r == 0 && save != NULL)
-		free(save);
-	return (r);
+	return (output(&save, line, r));
 }
