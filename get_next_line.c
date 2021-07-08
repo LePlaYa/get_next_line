@@ -51,7 +51,7 @@ char	*get_new_line(char **save, char **line)
 		free(*save);
 		*save = NULL;
 	}
-	add_new_line_symbol(*line);
+	*line = add_new_line_symbol(*line);
 	return (*line);
 }
 
