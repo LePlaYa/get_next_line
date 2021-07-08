@@ -22,7 +22,12 @@ int	get_line_length(char *save)
 	return (len);
 }
 
-int	get_new_line(char **save, char **line)
+char	*add_new_line_symbol(char *save)
+{
+	return (ft_strjoin(save, "\n"));
+}
+
+char	*get_new_line(char **save, char **line)
 {
 	int		len;
 	char	*tmp;
@@ -45,30 +50,33 @@ int	get_new_line(char **save, char **line)
 		*line = ft_strdup(*save);
 		free(*save);
 		*save = NULL;
-		return (0);
 	}
-	return (1);
+	add_new_line_symbol(*line);
+	return (*line);
 }
 
-int	output(char **save, char **line, int r)
+char	*output(char **save, char **line, int r)
 {
 	if (r < 0)
-		return (-1);
+		return (NULL);
 	else if (r == 0 && *save == NULL)
-		return (0);
+		return (NULL);
 	else
 		return (get_new_line(save, line));
 }
 
-int	get_next_line(int fd, char **line)
+char	*get_next_line(int fd)
 {
 	int				r;
 	static char		*save;
 	char			buf[BUFFER_SIZE + 1];
 	char			*tmp;
+	char			**line;
 
-	if (fd < 0 || line == NULL || BUFFER_SIZE <= 0)
-		return (-1);
+	line = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	line = malloc(sizeof(char *));
 	r = read(fd, buf, BUFFER_SIZE);
 	while (r > 0)
 	{
