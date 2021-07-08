@@ -12,19 +12,6 @@
 
 #include "get_next_line.h"
 
-void	ft_bzero(void *s, size_t n)
-{
-	char	*str;
-
-	str = s;
-	while (str && n > 0)
-	{
-		n--;
-		*str = '\0';
-		str++;
-	}
-}
-
 size_t	ft_strlen(const char *str)
 {
 	int		i;
@@ -77,80 +64,32 @@ char	*ft_strchr(const char *str, int c)
 	return (0);
 }
 
-char	*dest_count(char *d, size_t n)
-{
-	while (n != 0 && *d)
-	{
-		d++;
-		n--;
-	}
-	return (d);
-}
-
-size_t	ft_strlcat(char *dest, const char *src, size_t dest_size)
-{
-	char	*d;
-	char	*s;
-	size_t	d_len;
-	size_t	n;
-
-	d = dest;
-	s = (char *)src;
-	n = dest_size;
-	d = dest_count(d, n);
-	d_len = d - dest;
-	n = dest_size - d_len;
-	if (n == 0)
-		return (d_len + ft_strlen(s));
-	while (*s)
-	{
-		if (n != 1)
-		{
-			*d = *s;
-			n--;
-			d++;
-		}
-		s++;
-	}
-	*d = '\0';
-	return (d_len + (s - src));
-}
-
-size_t	ft_strlcpy(char *dest, const char *src, size_t dest_size)
-{
-	size_t	src_size;
-
-	src_size = 0;
-	if (dest_size == 0)
-	{
-		while (src[src_size])
-		{
-			src_size++;
-		}
-		return (src_size);
-	}
-	while (src_size < dest_size - 1 && src[src_size] != '\0')
-	{
-		dest[src_size] = src[src_size];
-		src_size++;
-	}
-	if (src_size < dest_size)
-		dest[src_size] = '\0';
-	while (src[src_size] != '\0')
-		src_size++;
-	return (src_size);
-}
-
 char	*ft_strjoin(char *s1, char const *s2)
 {
-	char	*dest;
-	size_t	len;
+	unsigned int	s1_len;
+	unsigned int	s2_len;
+	unsigned int	i;
+	unsigned int	j;
+	char			*out_str;
 
-	len = ft_strlen(s1) + ft_strlen(s2) + 1;
-	dest = malloc(sizeof(char) * (len + 1));
-	ft_strlcpy(dest, s1, len);
-	ft_strlcat(dest, s2, len);
-	return (dest);
+	if (!s1 || !s2)
+		return (NULL);
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	i = 0;
+	j = -1;
+	out_str = malloc(sizeof(char) * (s1_len + s2_len + 1));
+	if (!out_str)
+		return (NULL);
+	while (s1[i])
+	{
+		out_str[i] = s1[i];
+		i++;
+	}
+	while (s2[++j])
+		out_str[i++] = s2[j];
+	out_str[i] = '\0';
+	return (out_str);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
@@ -175,7 +114,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		dest[i] = s[start];
 		start++;
 		i++;
-	}
+	} 
 	dest[i] = '\0';
 	return (dest);
 }
