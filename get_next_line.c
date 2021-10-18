@@ -24,7 +24,13 @@ int	get_line_length(char *save)
 
 char	*add_new_line_symbol(char *save)
 {
-	return (ft_strjoin(save, "\n"));
+	char *tmp;
+
+	tmp = save;
+	save = ft_strjoin(save, "\n");
+	free(tmp);
+	return (save);
+	//return (ft_strjoin(save, "\n"));
 }
 
 char	*get_new_line(char **save, char **line)
@@ -44,6 +50,9 @@ char	*get_new_line(char **save, char **line)
 			free(*save);
 			*save = NULL;
 		}
+		//tmp = *line;
+		*line = add_new_line_symbol(*line);
+		//free(tmp);
 	}
 	else
 	{
@@ -51,18 +60,20 @@ char	*get_new_line(char **save, char **line)
 		free(*save);
 		*save = NULL;
 	}
-	*line = add_new_line_symbol(*line);
 	return (*line);
 }
 
-char	*output(char **save, char **line, int r)
+char	*output(char **save, int r)
 {
+	char	*line;
+
+	line = NULL;
 	if (r < 0)
 		return (NULL);
 	else if (r == 0 && *save == NULL)
 		return (NULL);
 	else
-		return (get_new_line(save, line));
+		return (get_new_line(save, &line));
 }
 
 char	*get_next_line(int fd)
@@ -71,12 +82,9 @@ char	*get_next_line(int fd)
 	static char		*save;
 	char			buf[BUFFER_SIZE + 1];
 	char			*tmp;
-	char			**line;
 
-	line = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = malloc(sizeof(char *));
 	r = read(fd, buf, BUFFER_SIZE);
 	while (r > 0)
 	{
@@ -94,5 +102,5 @@ char	*get_next_line(int fd)
 			break ;
 		r = read(fd, buf, BUFFER_SIZE);
 	}
-	return (output(&save, line, r));
+	return (output(&save, r));
 }
