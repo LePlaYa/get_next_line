@@ -24,13 +24,12 @@ int	get_line_length(char *save)
 
 char	*add_new_line_symbol(char *save)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = save;
 	save = ft_strjoin(save, "\n");
 	free(tmp);
 	return (save);
-	//return (ft_strjoin(save, "\n"));
 }
 
 char	*get_new_line(char **save, char **line)
@@ -50,9 +49,7 @@ char	*get_new_line(char **save, char **line)
 			free(*save);
 			*save = NULL;
 		}
-		//tmp = *line;
 		*line = add_new_line_symbol(*line);
-		//free(tmp);
 	}
 	else
 	{
